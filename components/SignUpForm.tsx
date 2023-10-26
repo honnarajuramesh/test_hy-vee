@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import GenderDropdown from "./DropDown";
 
-type Props = {};
+type Props = {
+  onComplete: () => void;
+};
 
-const SignUpForm = (props: Props) => {
+const SignUpForm = ({ onComplete }: Props) => {
   const [formData, setFormData] = useState({
     age: "",
     nationality: "",
@@ -16,6 +18,10 @@ const SignUpForm = (props: Props) => {
     if (formData.age && formData.nationality && formData.gender) {
       // Handle form submission with formData
       console.log("Form Data:", formData);
+      alert(
+        `Data provided, Age: ${formData.age}, Nationality: ${formData.nationality}, and Gender: ${formData.gender}`
+      );
+      onComplete();
     } else {
       // Handle the case when the gender field is not selected
       alert("Please select a gender.");

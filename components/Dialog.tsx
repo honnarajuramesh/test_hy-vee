@@ -58,7 +58,7 @@ const MyModal = ({ isModalOpen, onModalClose }: Modalprops) => {
                   >
                     Sign Up
                   </Dialog.Title>
-                  <SignUpForm />
+                  <SignUpForm onComplete={closeModal} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
