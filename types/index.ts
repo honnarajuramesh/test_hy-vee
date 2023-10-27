@@ -12,3 +12,21 @@ export interface Modalprops {
   isModalOpen: boolean;
   onModalClose: () => void;
 }
+
+// this interface was created after looking into docs of "randomuser.me",
+//And only partial/ required part is used here.
+
+interface User {
+  dob: { date: Date; age: number };
+  gender: "female" | "male";
+  location: {
+    city: string;
+    coordinates: { latitude: string; longitude: string };
+    country: string;
+    postcode: number;
+    state: string;
+  };
+}
+export interface UserResponce {
+  results: [User];
+}

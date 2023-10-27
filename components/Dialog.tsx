@@ -17,9 +17,6 @@ const MyModal = ({ isModalOpen, onModalClose }: Modalprops) => {
     onModalClose();
   };
 
-  //Here I am copying code from https://headlessui.dev/react/modal,
-  //And adding "useSearchParams" an other required changes.
-
   return (
     <>
       <Transition appear show={isModalOpenFromUrlBoolean} as={Fragment}>

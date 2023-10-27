@@ -1,104 +1,60 @@
 "use client";
 import React, { useState } from "react";
 import GenderDropdown from "./DropDown";
+import { fetchUser } from "@/utils";
+import LoadingScreen from "@/app/loading";
+import { UserResponce } from "@/types";
 
 type Props = {
   onComplete: () => void;
 };
 
 const SignUpForm = ({ onComplete }: Props) => {
-  const [formData, setFormData] = useState({
-    age: "",
-    nationality: "",
-    gender: "",
-  });
+  const [userName, updateUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.age && formData.nationality && formData.gender) {
-      // Handle form submission with formData
-      console.log("Form Data:", formData);
-      alert(
-        `Data provided, Age: ${formData.age}, Nationality: ${formData.nationality}, and Gender: ${formData.gender}`
-      );
-      onComplete();
-    } else {
-      // Handle the case when the gender field is not selected
-      alert("Please select a gender.");
-    }
+    setIsLoading(true);
+
+    const { results }: UserResponce = await fetchUser(userName);
+    setIsLoading(false);
+    onComplete();
+
+    const { dob, gender, location } = results[0];
+    alert(
+      `Data provided, Age: ${dob.age}, Gender: ${gender}, and Nationality: ${location.country}`
+    );
   };
 
-  const handleGenderSelect = (selectedGender: string) => {
-    setFormData({ ...formData, gender: selectedGender });
+  const handleChange = (value: string) => {
+    updateUserName(value);
   };
-
-  const handleChange = (name: "age" | "nationality", value: string) => {
-    setFormData({ ...formData, [name]: value });
-  };
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
-    <form
-      className="space-y-6"
-      action="#"
-      method="POST"
-      onSubmit={handleSubmit}
-    >
-      <div>
-        <label
-          htmlFor="age"
-          className="block text-sm font-medium leading-6 text-gray-900 mt-5"
-        >
-          Age
-        </label>
-        <div className="mt-2">
-          <input
-            id="age"
-            name="age"
-            type="number"
-            required
-            className="input-field "
-            onChange={(e) => handleChange("age", e.target.value)}
-          />
-        </div>
-      </div>
-
-      <div>
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      <div className="mt-5">
         <div className="flex items-center justify-between">
           <label
-            htmlFor="nationality"
+            htmlFor="name"
             className="block text-sm font-medium leading-6 text-gray-900"
           >
-            Nationality
+            User Name
           </label>
         </div>
         <div className="mt-2">
           <input
-            id="nationality"
-            name="nationality"
+            id="name"
+            name="name"
             type="text"
-            autoComplete="current-password"
             required
             className="input-field "
-            onChange={(e) => handleChange("nationality", e.target.value)}
+            onChange={(e) => handleChange(e.target.value)}
           />
         </div>
-      </div>
-
-      <div>
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor="gender"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Gender
-          </label>
-        </div>
-        <GenderDropdown
-          onGenderSelect={function (gender: string): void {
-            console.log(gender);
-            handleGenderSelect(gender);
-          }}
-        />
       </div>
 
       <div>
